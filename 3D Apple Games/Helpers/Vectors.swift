@@ -157,7 +157,22 @@ public func + <U:Vector, V:Vector>(u:U, v:V) -> U where U.Scalar == V.Scalar {
     return u + U.init(v)
 }
 
+// MARK: - Real Vector
+public protocol RealVector: Vector where Scalar: RealNumber {
+    
+}
 
+extension RealVector {
+    // let RealVector can initialize with another (different type) RealVector
+    public init<V:RealVector>(_ v:V) {
+        var coords = [Self.Scalar]()
+        for i in 0...(Self.dimension - 1) {
+            coords.append(Self.Scalar.init(v[i].realValue))
+        }
+        self.init()
+        self.coordinates = coords
+    }
+}
 
 // MARK: - Field conforming types
 
@@ -176,7 +191,7 @@ extension Float: RealNumber {
 // MARK: -  Vector Conforming Types
 
 // CGPoint
-extension CGPoint:Vector {
+extension CGPoint: RealVector {
     
     public typealias Scalar = CGFloat
     public static var dimension: Int { return 2 }
@@ -193,7 +208,7 @@ extension CGPoint:Vector {
 }
 
 // CGVector
-extension CGVector: Vector {
+extension CGVector: RealVector {
 
     public typealias Scalar = CGFloat
     public static var dimension: Int { return 2 }
@@ -209,7 +224,7 @@ extension CGVector: Vector {
 }// end: extension CGVector
 
 // CGSize as Vector
-extension CGSize: Vector {
+extension CGSize: RealVector {
     
     public typealias Scalar = CGFloat
     public static var dimension: Int { return 2 }
@@ -226,7 +241,7 @@ extension CGSize: Vector {
 
 
 // SCNVector3 as Vector
-extension SCNVector3: Vector {
+extension SCNVector3: RealVector {
     
     public typealias Scalar = Float // scalar field
     public static var dimension: Int { return 3 }
@@ -244,7 +259,7 @@ extension SCNVector3: Vector {
 }
 
 // SCNVector4 as Vector4D
-extension SCNVector4: Vector {
+extension SCNVector4: RealVector {
     
     public typealias Scalar = Float // scalar field
     public static var dimension: Int { return 4 }
