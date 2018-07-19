@@ -11,20 +11,20 @@ import SceneKit
 extension SCNNode {
     
     // put node with specific geometry at optional position (default = origin)
-    public func putGeometry(
-        _ geometry:SCNGeometry,
-        color: UIColor = .green,
-        at point: SCNVector3? = nil
+    public func spawnShape(
+        _ geometry:SCNGeometry, color: UIColor = .green, at point: SCNVector3? = nil
         ) -> SCNNode
     {
         let node = SCNNode(geometry: geometry)
-        node.geometry?.materials.first?.diffuse.contents = color   // color
-        if let p = point { node.position = p }              // set position if neccesary
+        // color
+        node.geometry?.materials.first?.diffuse.contents = color
+        // set position if neccesary
+        if let p = point { node.position = p }
         addChildNode(node)
         return node
     }
     
-    public func putSampleGeometries() {
+    public func spawnSampleShapes() {
         
         // constants
         let w: Float = 0.8
@@ -53,13 +53,14 @@ extension SCNNode {
         ]
         
         for i in 0...8 {
-            let node = putGeometry(geo[i], color: color[i], at: position[i])
-            if i == 0 { // it's a plane, rotate 90 degrees
+            let node = spawnShape(geo[i], color: color[i], at: position[i])
+            if i == 0 {
+                // it's a plane, rotate 90 degrees
                 // rotation axis: (1,0,0), angle: -pi/2
                 node.rotation = SCNVector4(1, 0, 0, -pi/2)
             }
         }
         
-    }// end: putSampleGeometries()
+    }// end: spawnSampleShapes()
     
 }// end: extension SCNNode

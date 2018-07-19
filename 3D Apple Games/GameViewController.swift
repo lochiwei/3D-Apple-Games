@@ -9,6 +9,7 @@
 import UIKit
 import QuartzCore
 import SceneKit
+import Vectors
 
 class GameViewController: UIViewController {
     
@@ -35,30 +36,35 @@ class GameViewController: UIViewController {
     }
 
     override func viewDidLoad() {
-        
         super.viewDidLoad()
-        
-        // create and figure scene
         setupScene()
-        setupCamera()
+    }
+    
+    // MARK: - Scene
+    
+    func setupScene() {
+        // create scene
+        scene = SCNScene()
+        // configure scene
+        sceneView.scene = scene
+        scene.rootNode.spawnSampleShapes()
+        // camera
+        setupCamera(at: [3, 3, 15])
+        // lights
         letThereBeLights()
     }
     
-    func setupScene() {
-        scene = SCNScene()
-        sceneView.scene = scene
-        scene.rootNode.putSampleGeometries()
-    }
-    
-    func setupCamera() {
+    func setupCamera(at position:SCNVector3) {
         
         // create and add a camera to the scene
         let cameraNode = SCNNode()
         cameraNode.camera = SCNCamera()
+        // A camera looks in the direction of the node’s negative z-axis, so you aim the camera by changing the position and orientation of the node containing it.
+        cameraNode.rotation = [0,1,0, Float(pi/12)]
         scene.rootNode.addChildNode(cameraNode)
         
         // place the camera
-        cameraNode.position = [0, 0, 15]
+        cameraNode.position = position
     }
     
     func letThereBeLights() {
@@ -80,13 +86,8 @@ class GameViewController: UIViewController {
     
     // MARK: - View Controller Properties
     
-    override var shouldAutorotate: Bool {
-        return true
-    }
-    
-    override var prefersStatusBarHidden: Bool {
-        return true
-    }
+    override var shouldAutorotate: Bool { return true }
+    override var prefersStatusBarHidden: Bool { return true }
     
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
         if UIDevice.current.userInterfaceIdiom == .phone {
